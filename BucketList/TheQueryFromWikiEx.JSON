@@ -1,0 +1,86 @@
+{
+    "batchcomplete":"",
+    "query": {
+        "pages": {
+            "3783787": {
+                "pageid":3783787,
+                "ns":0,
+                "title":"Arax\u00e1",
+                "index":-1,
+                "coordinates": [{
+                    "lat":-19.59277778,
+                    "lon":-46.94083333,
+                    "primary":"",
+                    "globe":"earth"
+                }],
+                "thumbnail": {
+                    "source":"https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Objetosindiginas.JPG/500px-Objetosindiginas.JPG",
+                    "width":500,
+                    "height":375
+                },
+                "terms": {
+                    "description": [
+                        "municipality in Brazil"
+                    ]
+                }
+            },
+            "6041645": {
+                "pageid":6041645,
+                "ns":0,
+                "title":"Arax\u00e1 Airport",
+                "index":0,
+                "coordinates": [ {
+                    "lat":-19.56305556,
+                    "lon":-46.96055556,
+                    "primary":"",
+                    "globe":"earth"
+                } ],
+                "terms": {
+                    "description": [
+                        "Airport in Brazil"
+                    ]}
+            },
+            "18055960": {
+                "pageid":18055960,
+                "ns":0,
+                "title":"Santa Rosa da Serra",
+                "index":1,
+                "coordinates":[ {
+                    "lat":-19.53,
+                    "lon":-46.96583333,
+                    "primary":"",
+                    "globe":"earth"
+                }],
+                "thumbnail":{
+                    "source":"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/MinasGerais_Municip_SantaRosadaSerra.svg/500px-MinasGerais_Municip_SantaRosadaSerra.svg.png",
+                    "width":500,
+                    "height":401
+                },"terms": {
+                    "description": [
+                        "town and municipality in the state of Minas Gerais, Brazil"
+                    ]
+                }
+            },
+            "50621040": {
+                "pageid":50621040,
+                "ns":0,
+                "title":"Companhia Brasileira de Metalurgia e Minera\u00e7\u00e3o",
+                "index":2,
+                "coordinates":[ {
+                    "lat":-19.66684444,
+                    "lon":-46.90868056,
+                    "primary":"",
+                    "globe":"earth"
+                } ],
+                "thumbnail": {
+                    "source":"https://upload.wikimedia.org/wikipedia/commons/e/ec/CBMM_logo.png",
+                    "width":280,
+                    "height":96
+                },
+                "terms": {
+                    "description": [ "mining company in Araxa, Brazil"]
+                }
+            }
+        }
+    }
+}
