@@ -18,8 +18,14 @@ import MapKit
 
 extension ContentView {
     
+    //Challenge 1
+    enum MapStylle {
+        case hybrid, standard, satellite
+    }
+    
     @Observable
     class ViewModel {
+        
         ///Reading data from a view model’s properties is usually fine, but writing it isn’t because the whole point of this exercise is to separate logic from layout. You can find these two places immediately if we clamp down on writing view model data – modify the locations property in your view model from var locations = [Location]() to this:
         private(set) var locations: [Location] ///No more  needs to be initialized to an empty array here (private(set) var locarions = [Location]()), because that’s handled by the initializer.
         ///Now we’ve said that reading locations is fine, but only the class itself can write locations. Immediately Xcode will point out the two places where we need to get code out of the view: adding a new location, and updating an existing one.
@@ -30,7 +36,10 @@ extension ContentView {
         let savePath = URL.documentsDirectory.appending(path: "SavedPlaces")
         
         ///to use biometrics unlock
-        var isUnlocked = false
+        var isUnlocked = true
+        
+        ///challenge 1
+        private(set) var mapType: MapStylle = MapStylle.standard
     
         ///we can start by adding a new method to the view model to handle adding a new location. First, add an import for CoreLocation to the top, then add this method to the class: That can then be used from the tap gesture in ContentView:
         func addLocation(at point: CLLocationCoordinate2D) {
