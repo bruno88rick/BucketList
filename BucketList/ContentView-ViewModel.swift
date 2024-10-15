@@ -40,6 +40,8 @@ extension ContentView {
         
         ///challenge 1
         private(set) var mapType: MapStylle = MapStylle.standard
+        var isAnimating = false
+        var showingMapStyleView = false
     
         ///we can start by adding a new method to the view model to handle adding a new location. First, add an import for CoreLocation to the top, then add this method to the class: That can then be used from the tap gesture in ContentView:
         func addLocation(at point: CLLocationCoordinate2D) {

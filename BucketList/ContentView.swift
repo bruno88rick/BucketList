@@ -20,16 +20,15 @@ struct ContentView: View {
     @State private var viewModel = ViewModel()
     ///Tip: This is a good example of why placing view models inside extensions is helpful – we just say ViewModel and we automatically get the correct view model type for the current view. That will of course break a lot of code, but the fixes are easy – just add viewModel in various places. So, locations becomes $viewModel.locations, and selectedPlace becomes $viewModel.selectedPlace. Once you’ve added that everywhere your code will compile again, but you might wonder how this has helped – haven’t we just moved our code from one place to another? Well, yes, but there is an important distinction that will become clearer as your skills grow: having all this functionality in a separate class makes it much easier to write tests for your code.
     
-    @State private var isAnimating = false
-    
-    @State private var showingMapStyleView = false
-    
     let startPosition = MapCameraPosition.region(
         MKCoordinateRegion(
             center: CLLocationCoordinate2D(latitude: 56, longitude: -3),
             span: MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10)
         )
     )
+    
+    //challenge 1 + show half modal .sheet view
+    @State private var mapStyleDetent = PresentationDetent.medium
     
     var body: some View {
         if viewModel.isUnlocked {
@@ -73,8 +72,14 @@ struct ContentView: View {
                             //viewModel.update(location: newLocation) -> so include newLocation in on closure EditView above
                         }
                     }
-                    .sheet(isPresented: $showingMapStyleView) {
-                        
+                    //challenge 1 + show half modal .sheet view
+                    .sheet(isPresented: $viewModel.showingMapStyleView) {
+                        MapStyleView()
+                            .presentationDetents(
+                                [.medium, .large],
+                                selection: $mapStyleDetent
+                            )
+                            .padding()
                     }
                 }
                 VStack {
@@ -82,13 +87,15 @@ struct ContentView: View {
                         Spacer()
                         Button {
                             withAnimation(.easeInOut(duration: 0.5)) {
-                                isAnimating.toggle()
-                                showingMapStyleView.toggle()
+                                viewModel.isAnimating.toggle()
+                                viewModel.showingMapStyleView.toggle()
                             }
                         } label: {
-                            Image(systemName: isAnimating ? "map.fill" : "map")
+                            Image(systemName: viewModel.isAnimating ? "map.fill" : "map")
                                 .contentTransition(.symbolEffect(.replace))
                         }
+                        .accessibilityIdentifier("mapTypeButton")
+                        .accessibilityValue("Change Map Type")
                         .frame(width: 50, height: 50)
                         .background(.white)
                         .foregroundStyle(.black)

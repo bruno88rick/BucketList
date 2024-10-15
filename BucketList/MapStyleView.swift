@@ -8,56 +8,72 @@
 import SwiftUI
 
 struct MapStyleView: View {
+    
+    @Environment(\.dismiss) var dismiss
+    
     var body: some View {
-        HStack {
-            Text("Choose a Map Style")
-                .font(.bold(.title3)())
-                .foregroundStyle(.black)
-                .padding()
-            Spacer()
-        }
-        
-        VStack {
+        NavigationStack {
             HStack {
-                Button {
-                    
-                } label: {
-                    VStack {
-                        Image(systemName: "map.fill")
-                            .resizable()
-                            .foregroundStyle(.red)
-                            .frame(width: 44, height: 44)
-                            .background(.white)
-                        Text("Standard")
-                    }
+                Text("Choose a Map Style")
+                    .font(.bold(.title3)())
+                    .foregroundStyle(.black)
                     .padding()
-                }
-                
-                Button {
-                    
-                } label: {
-                    VStack {
-                        Image(systemName: "map.fill")
-                            .resizable()
-                            .foregroundStyle(.red)
-                            .frame(width: 44, height: 44)
-                            .background(.white)
-                        Text("Hybrid")
-                    }
-                    .padding()
-                }
+                Spacer()
+            }
             
-                
-                Button {
+            VStack {
+                HStack {
+                    Button {
+                        
+                    } label: {
+                        VStack {
+                            Image(systemName: "map.fill")
+                                .resizable()
+                                .foregroundStyle(.red)
+                                .frame(width: 44, height: 44)
+                                .background(.white)
+                            Text("Standard")
+                        }
+                        .padding()
+                    }
                     
-                } label: {
-                    VStack {
-                        Image(systemName: "map.fill")
-                            .resizable()
-                            .foregroundStyle(.red)
-                            .frame(width: 44, height: 44)
-                            .background(.white)
-                        Text("Satellite")
+                    Button {
+                        
+                    } label: {
+                        VStack {
+                            Image(systemName: "map.fill")
+                                .resizable()
+                                .foregroundStyle(.red)
+                                .frame(width: 44, height: 44)
+                                .background(.white)
+                            Text("Hybrid")
+                        }
+                        .padding()
+                    }
+                    
+                    
+                    Button {
+                        
+                    } label: {
+                        VStack {
+                            Image(systemName: "map.fill")
+                                .resizable()
+                                .foregroundStyle(.red)
+                                .frame(width: 44, height: 44)
+                                .background(.white)
+                            Text("Satellite")
+                        }
+                        .padding()
+                    }
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Label("Exit", systemImage: "xmark")
+                            .foregroundStyle(.black)
                     }
                     .padding()
                 }
