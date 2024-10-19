@@ -29,6 +29,7 @@ struct ContentView: View {
     
     //challenge 1 + show half modal .sheet view
     @State private var mapStyleDetent = PresentationDetent.medium
+    @State private var mapType = UserDefaults.standard.string(forKey: "mapType")
     
     var body: some View {
         if viewModel.isUnlocked {
@@ -45,13 +46,12 @@ struct ContentView: View {
                                     .clipShape(.circle)
                                     .shadow(color: .gray, radius: 5, x: 5, y: 0)
                                     .onLongPressGesture() {
-                                        print("I'm log pressing..")
                                         viewModel.selectedPlace = location
                                     }
                             }
                         }
                     }
-                    .mapStyle(MapStyle.standard)
+                    .mapStyle(mapType == "standard" ? .standard : .hybrid)
                     .onTapGesture { position in
                         if let coordinate = proxy.convert(position, from: .local) {
                             /*let newLocation = Location(id: UUID(), name: "New Location", description: "", latitude: coordinate.latitude, longitude: coordinate.longitude)
@@ -111,6 +111,19 @@ struct ContentView: View {
                 .background(.blue)
                 .foregroundStyle(.white)
                 .clipShape(.capsule)
+        }
+    }
+    
+    private func switchMapStyle() -> MKMapType {
+        switch mapType {
+        case "standard":
+            return .standard
+        case "hybrid":
+            return .hybrid
+        case "satellite":
+            return .satellite
+        default:
+            return .standard
         }
     }
 }

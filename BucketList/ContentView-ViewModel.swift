@@ -18,11 +18,6 @@ import MapKit
 
 extension ContentView {
     
-    //Challenge 1
-    enum MapStylle {
-        case hybrid, standard, satellite
-    }
-    
     @Observable
     class ViewModel {
         
@@ -39,7 +34,7 @@ extension ContentView {
         var isUnlocked = true
         
         ///challenge 1
-        private(set) var mapType: MapStylle = MapStylle.standard
+       // private(set) var mapType: MapStyle = MapStyle.standard
         var isAnimating = false
         var showingMapStyleView = false
     

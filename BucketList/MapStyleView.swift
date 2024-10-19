@@ -10,6 +10,7 @@ import SwiftUI
 struct MapStyleView: View {
     
     @Environment(\.dismiss) var dismiss
+    @State private var mapType = UserDefaults.standard.string(forKey: "mapType")
     
     var body: some View {
         NavigationStack {
@@ -24,28 +25,48 @@ struct MapStyleView: View {
             VStack {
                 HStack {
                     Button {
-                        
+                        UserDefaults.standard.set("standard", forKey: "mapType")
+                        dismiss()
                     } label: {
                         VStack {
-                            Image(systemName: "map.fill")
-                                .resizable()
-                                .foregroundStyle(.red)
-                                .frame(width: 44, height: 44)
-                                .background(.white)
+                            ZStack {
+                                Rectangle()
+                                    .frame(width: 62, height: 46)
+                                    .foregroundStyle(.yellow)
+                                    .clipShape(.capsule)
+                                    .opacity(0.9)
+                                    .blur(radius: 5)
+                                Image(.standardMap)
+                                    .resizable()
+                                    .foregroundStyle(.red)
+                                    .frame(width: 60, height: 44)
+                                    .background(.white)
+                                    .clipShape(.capsule)
+                            }
                             Text("Standard")
                         }
                         .padding()
                     }
                     
                     Button {
-                        
+                        UserDefaults.standard.set("hybrid", forKey: "mapType")
+                        dismiss()
                     } label: {
                         VStack {
-                            Image(systemName: "map.fill")
-                                .resizable()
-                                .foregroundStyle(.red)
-                                .frame(width: 44, height: 44)
-                                .background(.white)
+                            ZStack {
+                                Rectangle()
+                                    .frame(width: 62, height: 46)
+                                    .foregroundStyle(.blue)
+                                    .clipShape(.capsule)
+                                    .opacity(0.9)
+                                    .blur(radius: 5)
+                                Image(.hybridMap)
+                                    .resizable()
+                                    .foregroundStyle(.red)
+                                    .frame(width: 60, height: 44)
+                                    .background(.white)
+                                    .clipShape(.capsule)
+                            }
                             Text("Hybrid")
                         }
                         .padding()
@@ -53,14 +74,24 @@ struct MapStyleView: View {
                     
                     
                     Button {
-                        
+                        UserDefaults.standard.set("sattelite", forKey: "mapType")
+                        dismiss()
                     } label: {
                         VStack {
-                            Image(systemName: "map.fill")
-                                .resizable()
-                                .foregroundStyle(.red)
-                                .frame(width: 44, height: 44)
-                                .background(.white)
+                            ZStack {
+                                Rectangle()
+                                    .frame(width: 62, height: 46)
+                                    .foregroundStyle(.brown)
+                                    .clipShape(.capsule)
+                                    .opacity(0.9)
+                                    .blur(radius: 10)
+                                Image(.satteliteMap)
+                                    .resizable()
+                                    .foregroundStyle(.red)
+                                    .frame(width: 60, height: 44)
+                                    .background(.white)
+                                    .clipShape(.capsule)
+                            }
                             Text("Satellite")
                         }
                         .padding()
@@ -71,9 +102,13 @@ struct MapStyleView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         dismiss()
+                        
                     } label: {
-                        Label("Exit", systemImage: "xmark")
-                            .foregroundStyle(.black)
+                        Image(systemName: "xmark")
+                            .frame(width: 33, height: 33)
+                            .background(.gray)
+                            .opacity(0.4)
+                            .clipShape(.circle)
                     }
                     .padding()
                 }
