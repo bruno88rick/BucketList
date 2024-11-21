@@ -31,7 +31,9 @@ extension ContentView {
         let savePath = URL.documentsDirectory.appending(path: "SavedPlaces")
         
         ///to use biometrics unlock
-        var isUnlocked = true
+        var isUnlocked = false
+        var errorToUnlock = false
+        var errorToUnlockMessage = "There was an error unlocking!"
         
         ///challenge 1
        // private(set) var mapType: MapStyle = MapStyle.standard
@@ -90,11 +92,13 @@ extension ContentView {
                     if success {
                         self.isUnlocked = true
                     } else {
-                        //error
+                        self.errorToUnlock = true
+                        self.errorToUnlockMessage = "An error occurred to unlock. Try again!"
                     }
                 }
             } else {
-                //no biometrics
+                self.errorToUnlock = true
+                self.errorToUnlockMessage = "Error to unlock with Biometrics. Your device does not support Biometrics. Use your password instead."
             }
         }
         

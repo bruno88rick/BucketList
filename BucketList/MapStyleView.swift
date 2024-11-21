@@ -71,8 +71,7 @@ struct MapStyleView: View {
                         }
                         .padding()
                     }
-                    
-                    
+
                     Button {
                         UserDefaults.standard.set("sattelite", forKey: "mapType")
                         dismiss()

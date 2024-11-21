@@ -33,76 +33,95 @@ struct ContentView: View {
     
     var body: some View {
         if viewModel.isUnlocked {
-            ZStack {
-                MapReader { proxy in
-                    Map(initialPosition: startPosition) {
-                        ForEach(viewModel.locations) { location in
-                            Annotation(location.name, coordinate: location.coordinate) {
-                                Image(systemName: "star.circle")
-                                    .resizable()
-                                    .foregroundStyle(.red)
-                                    .frame(width: 44, height: 44)
-                                    .background(.white)
-                                    .clipShape(.circle)
-                                    .shadow(color: .gray, radius: 5, x: 5, y: 0)
-                                    .onLongPressGesture() {
-                                        viewModel.selectedPlace = location
-                                    }
+            VStack {
+                ZStack {
+                    MapReader { proxy in
+                        Map(initialPosition: startPosition) {
+                            ForEach(viewModel.locations) { location in
+                                Annotation(location.name, coordinate: location.coordinate) {
+                                    Image(systemName: "star.circle")
+                                        .resizable()
+                                        .foregroundStyle(.red)
+                                        .frame(width: 44, height: 44)
+                                        .background(.white)
+                                        .clipShape(.circle)
+                                        .shadow(color: .gray, radius: 5, x: 5, y: 0)
+                                        .onLongPressGesture() {
+                                            viewModel.selectedPlace = location
+                                        }
+                                }
                             }
                         }
-                    }
-                    .mapStyle(mapType == "standard" ? .standard : .hybrid)
-                    .onTapGesture { position in
-                        if let coordinate = proxy.convert(position, from: .local) {
-                            /*let newLocation = Location(id: UUID(), name: "New Location", description: "", latitude: coordinate.latitude, longitude: coordinate.longitude)
-                             viewModel.locations.append(newLocation) -> Moved to ViewModel*/
-                            viewModel.addLocation(at: coordinate)
-                            
+                        .mapStyle(mapType == "standard" ? .standard : .hybrid)
+                        .onTapGesture { position in
+                            if let coordinate = proxy.convert(position, from: .local) {
+                                /*let newLocation = Location(id: UUID(), name: "New Location", description: "", latitude: coordinate.latitude, longitude: coordinate.longitude)
+                                 viewModel.locations.append(newLocation) -> Moved to ViewModel*/
+                                viewModel.addLocation(at: coordinate)
+                                
+                            }
+                        }
+                        .sheet(item: $viewModel.selectedPlace) { place in
+                            /*that passes the location into EditView, and also passes in a closure to run when the Save button is pressed. That accepts the new location, then looks up where the current location is and replaces it in the array. This will cause our map to update immediately with the new data.*/
+                            EditView(location: place) { //newLocation in
+                                
+                                /*if let index = viewModel.locations.firstIndex(of: place) {
+                                 viewModel.locations[index] = newLocation -> Moved to ViewModel */
+                                
+                                viewModel.update(location: $0)
+                                ///or
+                                //viewModel.update(location: newLocation) -> so include newLocation in on closure EditView above
+                            }
+                        }
+                        //challenge 1 + show half modal .sheet view
+                        .sheet(isPresented: $viewModel.showingMapStyleView) {
+                            MapStyleView()
+                                .presentationDetents(
+                                    [.medium, .large],
+                                    selection: $mapStyleDetent
+                                )
+                                .padding()
                         }
                     }
-                    .sheet(item: $viewModel.selectedPlace) { place in
-                        /*that passes the location into EditView, and also passes in a closure to run when the Save button is pressed. That accepts the new location, then looks up where the current location is and replaces it in the array. This will cause our map to update immediately with the new data.*/
-                        EditView(location: place) { //newLocation in
-                            
-                            /*if let index = viewModel.locations.firstIndex(of: place) {
-                             viewModel.locations[index] = newLocation -> Moved to ViewModel */
-                            
-                            viewModel.update(location: $0)
-                            ///or
-                            //viewModel.update(location: newLocation) -> so include newLocation in on closure EditView above
-                        }
-                    }
-                    //challenge 1 + show half modal .sheet view
-                    .sheet(isPresented: $viewModel.showingMapStyleView) {
-                        MapStyleView()
-                            .presentationDetents(
-                                [.medium, .large],
-                                selection: $mapStyleDetent
-                            )
+                    VStack {
+                        HStack {
+                            Spacer()
+                            Button {
+                                withAnimation(.easeInOut(duration: 0.5)) {
+                                    viewModel.isAnimating.toggle()
+                                    viewModel.showingMapStyleView.toggle()
+                                }
+                            } label: {
+                                Image(systemName: viewModel.isAnimating ? "map.fill" : "map")
+                                    .contentTransition(.symbolEffect(.replace))
+                            }
+                            .accessibilityIdentifier("mapTypeButton")
+                            .accessibilityValue("Change Map Type")
+                            .frame(width: 50, height: 50)
+                            .background(.white)
+                            .foregroundStyle(.black)
+                            .clipShape(.capsule)
                             .padding()
+                        }
+                        Spacer()
                     }
                 }
-                VStack {
-                    HStack {
-                        Spacer()
-                        Button {
-                            withAnimation(.easeInOut(duration: 0.5)) {
-                                viewModel.isAnimating.toggle()
-                                viewModel.showingMapStyleView.toggle()
-                            }
-                        } label: {
-                            Image(systemName: viewModel.isAnimating ? "map.fill" : "map")
-                                .contentTransition(.symbolEffect(.replace))
-                        }
-                        .accessibilityIdentifier("mapTypeButton")
-                        .accessibilityValue("Change Map Type")
-                        .frame(width: 50, height: 50)
-                        .background(.white)
-                        .foregroundStyle(.black)
-                        .clipShape(.capsule)
-                        .padding()
-                    }
-                    Spacer()
+                
+                //other way to select a map, instead of partial modal
+                Picker("Map Mode", selection: $mapType) {
+                    Text("Standard")
+                        .tag("standard")
+                    
+                    Text("Hybrid")
+                        .tag("hybrid")
+                    
+                    Text("Sattelite")
+                        .tag("satellite")
+                }
+                .pickerStyle(.segmented)
+                .padding()
+                .onChange(of: mapType) {
+                    UserDefaults.standard.set(mapType, forKey: "mapType")
                 }
             }
         } else {
@@ -111,6 +130,11 @@ struct ContentView: View {
                 .background(.blue)
                 .foregroundStyle(.white)
                 .clipShape(.capsule)
+                .alert("Error to unock", isPresented: $viewModel.errorToUnlock) {
+                    Button("Ok") { }
+                } message: {
+                    Text(viewModel.errorToUnlockMessage)
+                }
         }
     }
     
